@@ -198,22 +198,45 @@ Frontend will run at: `http://localhost:3000`
 
 ## 🚀 Deployment
 
-### Frontend → Vercel
-1. Push to GitHub
-2. Import in [vercel.com](https://vercel.com)
-3. Set env vars: `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_SOCKET_URL`
+### AWS Frontend → Amplify
+1. Push the repo to GitHub.
+2. Open the AWS Amplify Console and connect your GitHub repository.
+3. Set the app root to `frontend`.
+4. Add environment variables:
+   - `NEXT_PUBLIC_API_URL=http://your-backend-url`
+   - `NEXT_PUBLIC_SOCKET_URL=http://your-backend-url`
+5. Use the build command `npm run build` and start command `npm run start`.
+6. Deploy and use the Amplify-generated URL.
 
-### Backend → Railway or Render
-1. Create new service from GitHub repo
-2. Set root directory to `backend/`
-3. Set env vars: `DATABASE_URL`, `JWT_SECRET`, `CLIENT_URL`, `PORT`
-4. Railway auto-detects Node.js
+### AWS Backend → Elastic Beanstalk (Node.js)
+1. Install the AWS CLI and EB CLI.
+2. Configure credentials with `aws configure`.
+3. In the `backend/` folder, run:
+   - `eb init -p node.js labmentix-backend --region us-east-1`
+   - `eb create labmentix-backend-env`
+4. Set environment variables using the EB console or CLI:
+   - `DATABASE_URL`
+   - `JWT_SECRET`
+   - `CLIENT_URL=http://your-frontend-url`
+   - `PORT=5000`
+5. Deploy with `eb deploy`.
 
-### Database → Supabase (Free)
-1. Create project at [supabase.com](https://supabase.com)
-2. Copy the **Direct connection** string from Settings → Database
-3. Use as `DATABASE_URL`
-4. Run `npx prisma db push` against Supabase
+### AWS Backend → ECS / ECR (Docker)
+1. Build backend Docker image using `backend/Dockerfile`.
+2. Push the image to Amazon ECR.
+3. Create an ECS cluster and Fargate service.
+4. Configure the service to use the backend image and environment variables.
+5. Attach an Application Load Balancer to expose port `5000`.
+
+### Local container testing
+1. Run `docker compose up --build` from the project root.
+2. Open `http://localhost:3000` and `http://localhost:5000/health`.
+
+### Database → AWS RDS or Supabase
+1. Create a PostgreSQL database in AWS RDS or Supabase.
+2. Copy the connection string.
+3. Set `DATABASE_URL` to the connection string in your backend environment.
+4. Run `npx prisma db push` from `backend/`.
 
 ---
 
