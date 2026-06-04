@@ -202,10 +202,10 @@ Frontend will run at: `http://localhost:3000`
 1. Push the repo to GitHub.
 2. Open the AWS Amplify Console and connect your GitHub repository.
 3. Set the app root to `frontend`.
-4. Add environment variables:
+4. Amplify will detect `frontend/amplify.yml` for the build settings.
+5. Add environment variables:
    - `NEXT_PUBLIC_API_URL=http://your-backend-url`
    - `NEXT_PUBLIC_SOCKET_URL=http://your-backend-url`
-5. Use the build command `npm run build` and start command `npm run start`.
 6. Deploy and use the Amplify-generated URL.
 
 ### AWS Backend → Elastic Beanstalk (Node.js)
@@ -214,15 +214,16 @@ Frontend will run at: `http://localhost:3000`
 3. In the `backend/` folder, run:
    - `eb init -p node.js labmentix-backend --region us-east-1`
    - `eb create labmentix-backend-env`
-4. Set environment variables using the EB console or CLI:
+4. A sample environment file is included at `backend/.ebextensions/01_environment.config`.
+5. Set environment variables using the EB console or CLI:
    - `DATABASE_URL`
    - `JWT_SECRET`
    - `CLIENT_URL=http://your-frontend-url`
    - `PORT=5000`
-5. Deploy with `eb deploy`.
+6. Deploy with `eb deploy`.
 
 ### AWS Backend → ECS / ECR (Docker)
-1. Build backend Docker image using `backend/Dockerfile`.
+1. Build the backend Docker image using `backend/Dockerfile`.
 2. Push the image to Amazon ECR.
 3. Create an ECS cluster and Fargate service.
 4. Configure the service to use the backend image and environment variables.
